@@ -1,0 +1,126 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Liste des cadeaux de Noël</title>
+  <link rel="stylesheet" href="decoration/application.css">
+  <style></style>
+</head>
+<body>
+  <div id="page-chargement-application">Chargement de l'application cadeau de Noël</div>
+  
+  <script type="plain/text" id="html-vue-cadeau">
+    <div class="page">
+        <h1>Cadeau de Noël</h1>
+        <h2 id="cadeau-nom"></h2>
+        <p id="cadeau-marque"></p>
+        <p id="cadeau-description"></p>
+        <a href="#" class="action">Revenir &agrave; la liste</a>
+    </div>
+  </script>
+  <script type="plain/text" id="html-vue-liste-cadeau">
+    <div class="page">
+    <h1>Liste des cadeaux de Noël</h1>
+    <a class="action" href="#ajouter-cadeau">Ajouter un cadeau</a>
+    <ul id="liste-cadeau">
+      <li><a href="#cadeau/{Cadeau.id}" class="liste-cadeau-item">{Cadeau.nom}</a></li>
+    </ul>
+  </div>
+  </script>
+  <script type="plain/text" id="html-vue-ajouter-cadeau">
+    <div class="page">
+    <h1>Ajouter un cadeau de Noël</h1>
+    <form id="formulaire-ajouter">
+      <fieldset>
+        <legend>Identification du cadeau</legend>
+        <div>
+          <label for="cadeau-nom">Nom</label>
+          <input type="text" id="cadeau-nom"/>
+        </div>
+        <div>
+          <label for="cadeau-marque">Marque</label>
+          <input type="text" id="cadeau-marque"/>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>D&eacute;tails sur le cadeau</legend>
+        <div>
+          <label for="cadeau-description">Description</label>
+          <textarea id="cadeau-description"></textarea>
+        </div>
+      </fieldset>
+      <input class="action" type="submit" id="enregistrer" value="Enregistrer"/>
+    </form>
+    <a href="#" class="action">Annuler et revenir &agrave; la liste</a>
+  </div>
+  </script>
+  
+  <script type="text/javascript">
+  
+    htmlVueCadeau = document.getElementById("html-vue-cadeau").innerHTML;
+    htmlVueAjouterCadeau = document.getElementById("html-vue-ajouter-cadeau").innerHTML;
+        
+        // Classe qui constitue le lien entre la source de données et l'app 
+        class CadeauDAO
+        {
+            listerCadeau()
+            {
+                var listeCadeau = []; // crée un tableau        
+                var cadeau = {};
+                cadeau.nom = "Raspberri PI";
+                cadeau.prix = "50$";
+                cadeau.description = "Nano ordinateur permettant de faire des projets DIY";
+                cadeau.marque = "Raspbian";
+                listeCadeau[0] = cadeau;        
+                console.log(cadeau);
+                cadeau = {};
+                cadeau.nom = "Arduino";
+                cadeau.prix = "20$";
+                cadeau.description = "Microcontroleur permettant les projet DIY";
+                cadeau.marque = "AMD";
+                listeCadeau[1] = cadeau;
+                
+                console.log(listeCadeau);   
+                return listeCadeau;
+            }
+        }
+        
+        // Classe qui a la responsabilité et l'exclusivité de gérer la page de liste de cadeaux
+        class VueListeCadeau
+        {
+            constructor()
+            {
+                this.html = document.getElementById("html-vue-liste-cadeau").innerHTML;
+            }
+            
+            afficher(listeCadeau)
+            {
+                document.getElementsByTagName("body")[0].innerHTML = this.html;
+                
+                let vueListe = document.getElementById("liste-cadeau");
+                console.log(vueListe); // pour voir si on a récupéré un objet graphique non-null
+                let listeHTML = "";
+                let cadeau;
+                for(let position = 0; position <listeCadeau.length; position++)
+                {
+                    cadeau = listeCadeau[position];
+                    listeHTML += "<li>"+listeCadeau[position].nom+"</li>";
+                }
+                vueListe.innerHTML = listeHTML;
+
+            }
+        }
+  
+
+        cadeauDAO = new CadeauDAO();
+        listeCadeau = cadeauDAO.listerCadeau();
+        vueListeCadeau = new VueListeCadeau();
+        vueListeCadeau.afficher(listeCadeau);
+  
+    
+    //document.getElementsByTagName("body")[0].innerHTML = htmlVueAjouterCadeau;
+    //document.getElementsByTagName("body")[0].innerHTML = htmlVueListeCadeau;
+    
+    
+  </script>
+</body>
+</html>
